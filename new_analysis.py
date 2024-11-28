@@ -1,8 +1,8 @@
 import pandas as pd
-import constants
+from constants import *
 
 
-def data_prep(df): 
+def data_prep(df):
     """
     Main function to prepare the data by removing columns, 
     handling missing values, removing rows with 'Unknown' values, 
@@ -10,27 +10,7 @@ def data_prep(df):
     """
 
     # List of columns to drop
-    columns_to_drop = [
-        "ObjectId",
-        "Num_of_Fatal_Injuries",
-        "Num_of_Major_Injuries",
-        "Num_Of_Pedestrians",
-        "Num_of_Bicycles",
-        "Num_of_Motorcycles",
-        "Max_Injury",
-        "Num_of_Injuries",
-        "Num_of_Minimal_Injuries",
-        "Num_of_Minor_Injuries",
-        "Accident_Year",
-        "Geo_ID",
-        "ID",
-        "X",
-        "Y",
-        "X_Coordinate",
-        "Y_Coordinate",
-        "Location", 
-        "Num_of_Vehicle"
-    ]
+    columns_to_drop = DATA_COLUMNS_TO_DROP
 
     df = remove_columns(df, columns_to_drop)  # Step 1: Remove unnecessary columns
 
@@ -44,9 +24,10 @@ def data_prep(df):
 
     df = remove_columns(df, columns_to_drop)
 
-    unique_columns = ["Location_Type","Classification_Of_Accident","Initial_Impact_Type","Road_Surface_Condition","Environment_Condition","Light","Traffic_Control"]
+    unique_columns = ["Location_Type", "Classification_Of_Accident", "Initial_Impact_Type", "Road_Surface_Condition",
+                      "Environment_Condition", "Light", "Traffic_Control"]
 
-    get_unique_values_to_excel(df,unique_columns,"Updated_Datasets/unique_cols_dataset.csv")
+    get_unique_values_to_excel(df, unique_columns, "Updated_Datasets/unique_cols_dataset.csv")
 
     # Specify the columns to process
     columns_to_trim = [
@@ -61,11 +42,10 @@ def data_prep(df):
     # Apply the function
     df = trim_columns(df, columns_to_trim)
 
-    get_unique_values_to_excel(df,columns_to_trim,"Updated_Datasets/unique_cols_dataset_after_trim.csv")
-
+    get_unique_values_to_excel(df, columns_to_trim, "Updated_Datasets/unique_cols_dataset_after_trim.csv")
 
     # Specify the output file name for the cleaned dataset
-    output_file = constants.cleaned_dataset_output_path
+    output_file = PATH_CLEANED_DATASET_OUTPUT
 
     # Write the updated DataFrame to a CSV file
     df.to_csv(output_file, index=False, mode='w')
@@ -79,7 +59,7 @@ def data_prep(df):
     return df
 
 
-def remove_columns(df, columns_to_drop): 
+def remove_columns(df, columns_to_drop):
     """
     Removes unnecessary columns from the dataset.
     """
@@ -88,10 +68,10 @@ def remove_columns(df, columns_to_drop):
     df = df.drop(columns=columns_to_drop)
 
     print("\nUnnecessary columns have been removed.")
-    return df 
+    return df
 
 
-def check_missing_values(df): 
+def check_missing_values(df):
     """
     Identifies and removes rows with missing values.
     """
@@ -112,9 +92,9 @@ def check_missing_values(df):
     print(f"\nRows with missing values removed: {rows_before - rows_after}")
 
     return df
-        
-        
-def check_unknowns(df): 
+
+
+def check_unknowns(df):
     """
     Identifies and removes rows where any value contains 'Unknown' (partial matches).
     """
@@ -153,6 +133,7 @@ def feature_engineering(df):
 
     print("\nFeature engineering completed. New features 'year', 'month', 'day', 'hour', and 'minute' have been added.")
     return df
+
 
 def get_unique_values_to_excel(df, columns, output_file):
     """
@@ -204,11 +185,9 @@ def trim_columns(df, columns):
             print(f"Warning: Column '{col}' does not exist in the DataFrame.")
     return df
 
- 
-
 
 # Specify the path to your CSV file
-file_path = constants.original_dataset_path
+file_path = PATH_ORIGINAL_DATASET
 
 # Load the CSV file into a DataFrame
 df = pd.read_csv(file_path)
