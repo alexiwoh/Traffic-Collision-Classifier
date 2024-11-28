@@ -1,0 +1,10 @@
+Accident_Date,Accident_Time,Location_Type,Classification_Of_Accident,Initial_Impact_Type,Road_Surface_Condition,Environment_Condition,Light,Traffic_Control,Num_of_Vehicle,Lat,Long
+2022/03/10,Unknown,Midblock,03 - P.D. only,06 - SMV unattended vehicle,01 - Dry,01 - Clear,00 - Unknown,,1,45.39974705,-75.72592089
+2022/03/16,6:20,Midblock,03 - P.D. only,07 - SMV other,01 - Dry,,03 - Dawn,10 - No control,1,45.29206102,-75.97379589
+2022/08/15,12:20,Midblock,03 - P.D. only,,01 - Dry,01 - Clear,01 - Daylight,10 - No control,2,45.23421812,-75.67522898
+2022/09/05,Unknown,Midblock,03 - P.D. only,06 - SMV unattended vehicle,,01 - Clear,00 - Unknown,10 - No control,1,45.41280519,-75.68599786
+2022/09/22,18:40,Midblock,03 - P.D. only,07 - SMV other,01 - Dry,,05 - Dusk,10 - No control,1,0.0,-79.23728992
+2022/09/14,9:25,Midblock,03 - P.D. only,,01 - Dry,01 - Clear,01 - Daylight,10 - No control,2,45.42629982,-75.68810021
+2022/09/14,13:00,Midblock,03 - P.D. only,,01 - Dry,01 - Clear,01 - Daylight,10 - No control,2,45.43597836,-75.66188082
+2022/10/04,13:04,Intersection,03 - P.D. only,,01 - Dry,01 - Clear,01 - Daylight,01 - Traffic signal,2,45.39545454,-75.60009575
+2022/11/09,Unknown,Midblock,03 - P.D. only,,01 - Dry,01 - Clear,07 - Dark,10 - No control,2,45.21711927,-75.57049233

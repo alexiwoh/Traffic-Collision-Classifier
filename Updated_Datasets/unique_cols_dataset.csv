@@ -1,0 +1,13 @@
+Location_Type,Classification_Of_Accident,Initial_Impact_Type,Road_Surface_Condition,Environment_Condition,Light,Traffic_Control
+Midblock,03 - P.D. only,07 - SMV other,03 - Loose snow,02 - Rain,07 - Dark,10 - No control
+Intersection,02 - Non-fatal injury,04 - Sideswipe,01 - Dry,03 - Snow,03 - Dawn,01 - Traffic signal
+,01 - Fatal injury,03 - Rear end,02 - Wet,05 - Drifting Snow,01 - Daylight,02 - Stop sign
+,,99 - Other,05 - Packed snow,01 - Clear,05 - Dusk,03 - Yield sign
+,,02 - Angle,04 - Slush,04 - Freezing Rain,99 - Other,11 - Roundabout
+,,06 - SMV unattended vehicle,06 - Ice,"07 - Fog, mist, smoke, dust",,08 - Traffic gate
+,,05 - Turning movement,99 - Other,99 - Other,,09 - Traffic controller
+,,01 - Approaching,08 - Loose sand or gravel,06 - Strong wind,,07 - School bus
+,,,09 - Spilled liquid,,,04 - Ped. crossover
+,,,07 - Mud,,,13 - MPS
+,,,,,,99 - Other
+,,,,,,12 - IPS

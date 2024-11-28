@@ -1,0 +1,13 @@
+Classification_Of_Accident,Initial_Impact_Type,Road_Surface_Condition,Environment_Condition,Light,Traffic_Control
+P.D. only,SMV other,Loose snow,Rain,Dark,No control
+Non-fatal injury,Sideswipe,Dry,Snow,Dawn,Traffic signal
+Fatal injury,Rear end,Wet,Drifting Snow,Daylight,Stop sign
+,Other,Packed snow,Clear,Dusk,Yield sign
+,Angle,Slush,Freezing Rain,Other,Roundabout
+,SMV unattended vehicle,Ice,"Fog, mist, smoke, dust",,Traffic gate
+,Turning movement,Other,Other,,Traffic controller
+,Approaching,Loose sand or gravel,Strong wind,,School bus
+,,Spilled liquid,,,Ped. crossover
+,,Mud,,,MPS
+,,,,,Other
+,,,,,IPS
