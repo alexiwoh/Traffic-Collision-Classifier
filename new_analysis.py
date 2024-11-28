@@ -1,4 +1,5 @@
 import pandas as pd
+import constants
 
 
 def data_prep(df): 
@@ -64,7 +65,7 @@ def data_prep(df):
 
 
     # Specify the output file name for the cleaned dataset
-    output_file = "Updated_Datasets/cleaned_dataset.csv"
+    output_file = constants.cleaned_dataset_output_path
 
     # Write the updated DataFrame to a CSV file
     df.to_csv(output_file, index=False, mode='w')
@@ -207,7 +208,7 @@ def trim_columns(df, columns):
 
 
 # Specify the path to your CSV file
-file_path = "Datasets/Traffic_Collision_Dataset.csv"
+file_path = constants.original_dataset_path
 
 # Load the CSV file into a DataFrame
 df = pd.read_csv(file_path)
