@@ -1,13 +1,18 @@
+"""
+This file contains all shared constants.
+"""
+
 # File Paths
 PATH_ORIGINAL_DATASET = "Datasets/Traffic_Collision_Dataset.csv"
 PATH_CLEANED_DATASET_OUTPUT = "Updated_Datasets/cleaned_dataset.csv"
 
-# Titles
+# Titles and text.
 TITLE_LENGTH = 42
+DIVIDER_LENGTH = 10
 TITLE_SUMMARY_STATISTICS = "SUMMARY STATISTICS"
 
-#  Data constants
-
+#  Dataset related constants
+# Final features to be used for analysis.
 DATA_FINAL_FEATURES = [
     "Location_Type",
     "Classification_Of_Accident",
@@ -25,7 +30,27 @@ DATA_FINAL_FEATURES = [
     "minute"
 ]
 
-# List of columns to drop
+DATA_CATEGORICAL_FEATURES = [
+    "Location_Type",
+    "Classification_Of_Accident",
+    "Initial_Impact_Type",
+    "Road_Surface_Condition",
+    "Environment_Condition",
+    "Light",
+    "Traffic_Control",
+]
+
+DATA_NUMERICAL_FEATURES = [
+    "Lat",
+    "Long",
+    "year",
+    "month",
+    "day",
+    "hour",
+    "minute"
+]
+
+# List of columns to drop.
 DATA_COLUMNS_TO_DROP = [
     "ObjectId",
     "Num_of_Fatal_Injuries",

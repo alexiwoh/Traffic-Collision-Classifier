@@ -1,8 +1,16 @@
+"""
+This file contains all shared helper functions.
+"""
+
 from constants import *
 
 
 def print_title(title: str = ""):
     print(f"----{title:-^{TITLE_LENGTH}}----")  # Print title centered and padded.
+
+
+def print_divider():
+    print("-" * DIVIDER_LENGTH)
 
 
 def run_section(title: str = "", func=None):
