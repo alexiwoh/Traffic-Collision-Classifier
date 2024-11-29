@@ -66,8 +66,53 @@ def visualize_bar_plots(data_frame=data, features: list[str] = DATA_CATEGORICAL_
             plt.close()
 
 
+def visualize_latitude_longitude(data_frame=data):
+    """
+    Scatterplot for longitude vs latitude of accidents.
+    """
+    plt.figure(figsize=(10, 6))
+    plt.scatter(data_frame["Long"], data_frame["Lat"], alpha=0.5)
+    title = "Geographic Distribution of Accidents"
+    plt.title(title)
+    plt.xlabel("Longitude")
+    plt.ylabel("Latitude")
+    plt.xticks(rotation=45)
+    # Save the plot to a file.
+    plt.savefig(f"{PATH_VISUALIZATIONS}/Scatter Plots/{title}{VISUALIZATIONS_FILE_TYPE}", dpi=300, bbox_inches="tight")
+    plt.close()
+
+
+def visualize_time_plots(data_frame=data):
+    features = ["year", "month", "hour"]
+    for feature in features:
+        plt.figure(figsize=(10, 6))
+
+        # Establish numerical ordering.
+        if feature == "hour":
+            ordering = [str(n) for n in sorted([int(x) for x in data_frame[feature].unique()])]
+        else:
+            ordering = sorted(data_frame[feature].unique())
+
+        # If the feature is "month", map it to the month names.
+        if feature == "month":
+            data_frame["month_name"] = data_frame["month"].map(MONTH_MAPPING)
+            sns.countplot(x="month_name", data=data_frame, order=list(MONTH_MAPPING.values()))
+        else:
+            sns.countplot(x=feature, data=data_frame, order=ordering)
+
+        title = f"Bar Plot of Accidents by {feature.capitalize()}"
+        plt.title(title)
+        plt.xlabel(f"{feature.capitalize()}")
+        plt.ylabel("Number of Accidents")
+        plt.xticks(rotation=45)
+        plt.savefig(f"{PATH_VISUALIZATIONS}/Bar Plots/{title}{VISUALIZATIONS_FILE_TYPE}", dpi=300, bbox_inches="tight")
+        plt.close()
+
+
 def visualize(data_frame):
     summary_statistics(data_frame, DATA_FINAL_FEATURES)
+    visualize_latitude_longitude(data_frame)
+    visualize_time_plots(data_frame)
     visualize_bar_plots(data_frame, DATA_CATEGORICAL_FEATURES, stack_plots=False)
     visualize_bar_plots(data_frame, DATA_CATEGORICAL_FEATURES, stack_plots=True)
 
