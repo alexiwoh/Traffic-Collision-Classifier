@@ -6,6 +6,12 @@ import matplotlib.pyplot as plt
 
 
 def summary_statistics(data_frame=data, features: list = DATA_FINAL_FEATURES):
+    """
+    Summary stats for data frame.
+    :param data_frame: the data frame.
+    :param features: features to summarize.
+    :return:
+    """
     def func():
         for feature in features:
             print(data_frame[feature].describe(include="all"))
@@ -83,6 +89,9 @@ def visualize_latitude_longitude(data_frame=data):
 
 
 def visualize_time_plots(data_frame=data):
+    """
+    Bar plots for times.
+    """
     features = ["year", "month", "hour"]
     for feature in features:
         plt.figure(figsize=(10, 6))
@@ -110,6 +119,9 @@ def visualize_time_plots(data_frame=data):
 
 
 def visualize(data_frame):
+    """
+    Produce statistics summary and visualization files.
+    """
     summary_statistics(data_frame, DATA_FINAL_FEATURES)
     visualize_latitude_longitude(data_frame)
     visualize_time_plots(data_frame)
