@@ -66,11 +66,11 @@ def visualize_bar_plots(data_frame=data, features: list[str] = DATA_CATEGORICAL_
             plt.close()
 
 
-def visualizations(data_frame):
+def visualize(data_frame):
     summary_statistics(data_frame, DATA_FINAL_FEATURES)
     visualize_bar_plots(data_frame, DATA_CATEGORICAL_FEATURES, stack_plots=False)
     visualize_bar_plots(data_frame, DATA_CATEGORICAL_FEATURES, stack_plots=True)
 
 
 if __name__ == '__main__':
-    visualizations(data)
+    visualize(data)
