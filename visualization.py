@@ -1,11 +1,10 @@
 from helpers import *
-from new_analysis import df as data
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
 
 
-def summary_statistics(data_frame=data, features: list = DATA_FINAL_FEATURES):
+def summary_statistics(data_frame, features: list = DATA_FINAL_FEATURES):
     """
     Summary stats for data frame.
     :param data_frame: the data frame.
@@ -22,7 +21,7 @@ def summary_statistics(data_frame=data, features: list = DATA_FINAL_FEATURES):
     run_section(TITLE_SUMMARY_STATISTICS, func)
 
 
-def visualize_bar_plots(data_frame=data, features: list[str] = DATA_CATEGORICAL_FEATURES, stack_plots: bool = False):
+def visualize_bar_plots(data_frame, features: list[str] = DATA_CATEGORICAL_FEATURES, stack_plots: bool = False):
     """
     Creates bar plots of categorical features.
     """
@@ -72,7 +71,7 @@ def visualize_bar_plots(data_frame=data, features: list[str] = DATA_CATEGORICAL_
             plt.close()
 
 
-def visualize_latitude_longitude(data_frame=data):
+def visualize_latitude_longitude(data_frame):
     """
     Scatterplot for longitude vs latitude of accidents.
     """
@@ -88,7 +87,7 @@ def visualize_latitude_longitude(data_frame=data):
     plt.close()
 
 
-def visualize_time_plots(data_frame=data):
+def visualize_time_plots(data_frame):
     """
     Bar plots for times.
     """
@@ -127,7 +126,3 @@ def visualize(data_frame):
     visualize_time_plots(data_frame)
     visualize_bar_plots(data_frame, DATA_CATEGORICAL_FEATURES, stack_plots=False)
     visualize_bar_plots(data_frame, DATA_CATEGORICAL_FEATURES, stack_plots=True)
-
-
-if __name__ == '__main__':
-    visualize(data)
