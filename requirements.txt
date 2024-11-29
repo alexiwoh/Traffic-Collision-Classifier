@@ -138,3 +138,5 @@ webencodings==0.5.1
 websocket-client==1.6.4
 XlsxWriter==3.1.2
 yarg==0.1.9
+
+seaborn~=0.13.2

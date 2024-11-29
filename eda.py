@@ -17,6 +17,9 @@ def summary_statistics(data_frame=data, features: list = DATA_FINAL_FEATURES):
 
 
 def visualize_bar_plots(data_frame=data, features: list[str] = DATA_CATEGORICAL_FEATURES):
+    """
+    Creates bar plots of categorical features.
+    """
     for feature in features:
         # Count the occurrences of each category and sort them.
         sorted_counts = data_frame[feature].value_counts().sort_values(ascending=False)
@@ -26,7 +29,7 @@ def visualize_bar_plots(data_frame=data, features: list[str] = DATA_CATEGORICAL_
 
         # Create the count plot.
         feature_name = feature.replace("_", " ")
-        title = f"Accidents by {feature_name}"
+        title = f"Bar Plot of Accidents by {feature_name}"
         plt.figure(figsize=(10, 6))  # Set figure size for better resolution
         sns.countplot(data=data_frame, x=feature, order=sorted_counts.index)
         plt.title(title)
@@ -45,4 +48,3 @@ def visualizations(data_frame):
 
 if __name__ == '__main__':
     visualizations(data)
-
