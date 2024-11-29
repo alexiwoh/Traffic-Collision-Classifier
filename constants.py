@@ -5,11 +5,15 @@ This file contains all shared constants.
 # File Paths
 PATH_ORIGINAL_DATASET = "Datasets/Traffic_Collision_Dataset.csv"
 PATH_CLEANED_DATASET_OUTPUT = "Updated_Datasets/cleaned_dataset.csv"
+PATH_VISUALIZATIONS = "Visualizations/"
 
 # Titles and text.
 TITLE_LENGTH = 42
 DIVIDER_LENGTH = 10
 TITLE_SUMMARY_STATISTICS = "SUMMARY STATISTICS"
+
+# Stylistic constants.
+VISUALIZATIONS_FILE_TYPE = ".png"
 
 #  Dataset related constants
 # Final features to be used for analysis.
@@ -30,6 +34,7 @@ DATA_FINAL_FEATURES = [
     "minute"
 ]
 
+# List of final categorical features being used.
 DATA_CATEGORICAL_FEATURES = [
     "Location_Type",
     "Classification_Of_Accident",
@@ -40,6 +45,7 @@ DATA_CATEGORICAL_FEATURES = [
     "Traffic_Control",
 ]
 
+# List of final numerical features being used.
 DATA_NUMERICAL_FEATURES = [
     "Lat",
     "Long",
