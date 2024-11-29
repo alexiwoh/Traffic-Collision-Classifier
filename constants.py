@@ -5,7 +5,7 @@ This file contains all shared constants.
 # File Paths
 PATH_ORIGINAL_DATASET = "Datasets/Traffic_Collision_Dataset.csv"
 PATH_CLEANED_DATASET_OUTPUT = "Updated_Datasets/cleaned_dataset.csv"
-PATH_VISUALIZATIONS = "Visualizations/"
+PATH_VISUALIZATIONS = "Visualizations"
 
 # Titles and text.
 TITLE_LENGTH = 42
