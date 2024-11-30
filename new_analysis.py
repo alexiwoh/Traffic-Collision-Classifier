@@ -1,6 +1,9 @@
 import pandas as pd
 from visualization import *
-
+from interpretability import *
+from model import *
+from imblearn.over_sampling import SMOTE
+from metrics import *
 
 def data_prep(df):
     """
@@ -44,6 +47,8 @@ def data_prep(df):
 
     get_unique_values_to_excel(df, columns_to_trim, "Updated_Datasets/unique_cols_dataset_after_trim.csv")
 
+    df = columns_encoding(df)
+
     # Specify the output file name for the cleaned dataset.
     output_file = PATH_CLEANED_DATASET_OUTPUT
 
@@ -58,7 +63,6 @@ def data_prep(df):
 
     return df
 
-
 def remove_columns(df, columns_to_drop):
     """
     Removes unnecessary columns from the dataset.
@@ -69,7 +73,6 @@ def remove_columns(df, columns_to_drop):
 
     print("\nUnnecessary columns have been removed.")
     return df
-
 
 def check_missing_values(df):
     """
@@ -93,7 +96,6 @@ def check_missing_values(df):
 
     return df
 
-
 def check_unknowns(df):
     """
     Identifies and removes rows where any value contains 'Unknown' (partial matches).
@@ -110,7 +112,6 @@ def check_unknowns(df):
     print(f"\nRows containing 'Unknown' removed: {rows_before - rows_after}")
 
     return df
-
 
 def feature_engineering(df):
     """
@@ -134,7 +135,6 @@ def feature_engineering(df):
     print("\nFeature engineering completed. New features 'year', 'month', 'day', 'hour', and 'minute' have been added.")
     return df
 
-
 def get_unique_values_to_excel(df, columns, output_file):
     """
     Get all unique values for the specified columns in the DataFrame and output them to an Excel file.
@@ -149,7 +149,7 @@ def get_unique_values_to_excel(df, columns, output_file):
     """
     unique_values = {}
 
-    # Collect unique values for each column.
+    # Collect unique values for each column
     for column in columns:
         if column in df.columns:
             unique_values[column] = df[column].unique().tolist()
@@ -157,12 +157,12 @@ def get_unique_values_to_excel(df, columns, output_file):
             print(f"Warning: Column '{column}' does not exist in the DataFrame.")
             unique_values[column] = []
 
-    # Create a DataFrame where each column contains the unique values for that column.
+    # Create a DataFrame where each column contains the unique values for that column
     unique_values_df = pd.DataFrame(dict([(k, pd.Series(v)) for k, v in unique_values.items()]))
 
-    # Output the unique values to an Excel file.
+    # Output the unique values to an Excel file
     unique_values_df.to_csv(output_file, index=False)
-    print(f"Unique values have been written to {output_file}.")
+    #print(f"Unique values have been written to {output_file}.")
 
 
 def trim_columns(df, columns):
@@ -179,11 +179,63 @@ def trim_columns(df, columns):
     """
     for col in columns:
         if col in df.columns:
-            # Trim the first 5 characters from the column.
+            # Trim the first 5 characters from the column
             df[col] = df[col].apply(lambda x: x[5:] if isinstance(x, str) and len(x) > 5 else x)
         else:
             print(f"Warning: Column '{col}' does not exist in the DataFrame.")
     return df
+
+def columns_encoding(df): 
+    # One-hot encode nominal columns
+    nominal_columns = ["Location_Type", "Initial_Impact_Type", "Road_Surface_Condition", "Environment_Condition", "Traffic_Control"]
+    df = pd.get_dummies(df, columns=nominal_columns, drop_first=True)
+
+    # Label encode ordinal columns
+    ordinal_columns = {"Classification_Of_Accident": {"P.D. only": 0, "Non-fatal injury": 1, "Fatal injury": 2},
+                    "Light": {"Dawn": 0, "Daylight": 1, "Dusk": 2, "Dark": 3, "Other": 4}}
+    for col, mapping in ordinal_columns.items():
+        df[col] = df[col].map(mapping)
+
+    return df
+
+
+def handle_class_imbalance(X, y):
+    """
+    Handles class imbalance using SMOTE (Synthetic Minority Oversampling Technique).
+
+    Parameters:
+        X: Feature matrix.
+        y: Target vector.
+
+    Returns:
+        X_resampled, y_resampled: Balanced feature matrix and target vector.
+    """
+    smote = SMOTE(random_state=42)
+    X_resampled, y_resampled = smote.fit_resample(X, y)
+
+    print("\nClass imbalance handled using SMOTE.")
+    return X_resampled, y_resampled
+
+def visualize_and_interpret(df, model, X):
+    """
+    Handles visualization and interpretability of the model and data.
+
+    Parameters:
+        df: The processed DataFrame.
+        model: The trained Random Forest model.
+        X: Feature matrix used for training.
+    """
+    # Plot feature importance
+    plot_feature_importance(model, X.columns)
+
+    # SHAP values for model interpretability
+    explain_with_shap(model, X)
+
+    # Generate partial dependence plots (PDPs)
+    plot_pdp(model, X, X.columns)
+
+    # Visualize data insights
+    visualize(df)
 
 
 # Specify the path to your CSV file.
@@ -195,8 +247,54 @@ df = pd.read_csv(file_path)
 # Apply data cleaning and pre-processing functions.
 df = data_prep(df)
 
+# Split into features and target variables.
+X, y = split_features_target(df, "Classification_Of_Accident")
+
+
+def check_classification_type(y):
+    """
+    Determines whether the classification is binary or multi-class.
+
+    Parameters:
+        y: Target variable (Series or array).
+
+    Returns:
+        str: "Binary Classification" or "Multi-Class Classification".
+    """
+    num_classes = len(pd.Series(y).unique())
+    if num_classes == 2:
+        return "Binary Classification"
+    else:
+        return "Multi-Class Classification"
+
+
+
+# Handle class imbalance.
+X_resampled, y_resampled = handle_class_imbalance(X, y)
+
+# Example usage
+classification_type = check_classification_type(y_resampled)
+print(f"The task is: {classification_type}")
+
+# Train the Random Forest Classifier.
+model, y_test, y_pred, y_pred_proba = train_random_forest(X_resampled, y_resampled)
+
+
+# Class names for visualization
+class_names = df["Classification_Of_Accident"].unique()
+
+
+# Example usage
+# Metrics visualization
+plot_confusion_matrix(y_test, y_pred, class_names)
+plot_multiclass_roc_curve(y_test, y_pred_proba, class_names)
+plot_multiclass_precision_recall_curve(y_test, y_pred_proba, class_names)
+plot_feature_importance_bar(model, X.columns)
+plot_classification_report(y_test, y_pred)
+plot_misclassifications(y_test, y_pred)
+
 # Verify successful cleaning.
 print(f"\nFinal number of rows in the cleaned dataset: {len(df)}")
 
-# Visualize and create charts.
-visualize(df)
+# Visualize and create interpretability insights.
+#visualize_and_interpret(df, model, X_resampled)
