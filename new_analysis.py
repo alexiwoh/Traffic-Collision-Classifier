@@ -5,6 +5,7 @@ from model import *
 from imblearn.over_sampling import SMOTE
 from metrics import *
 
+
 def data_prep(df):
     """
     Main function to prepare the data by removing columns, 
@@ -63,6 +64,7 @@ def data_prep(df):
 
     return df
 
+
 def remove_columns(df, columns_to_drop):
     """
     Removes unnecessary columns from the dataset.
@@ -73,6 +75,7 @@ def remove_columns(df, columns_to_drop):
 
     print("\nUnnecessary columns have been removed.")
     return df
+
 
 def check_missing_values(df):
     """
@@ -96,6 +99,7 @@ def check_missing_values(df):
 
     return df
 
+
 def check_unknowns(df):
     """
     Identifies and removes rows where any value contains 'Unknown' (partial matches).
@@ -112,6 +116,7 @@ def check_unknowns(df):
     print(f"\nRows containing 'Unknown' removed: {rows_before - rows_after}")
 
     return df
+
 
 def feature_engineering(df):
     """
@@ -134,6 +139,7 @@ def feature_engineering(df):
 
     print("\nFeature engineering completed. New features 'year', 'month', 'day', 'hour', and 'minute' have been added.")
     return df
+
 
 def get_unique_values_to_excel(df, columns, output_file):
     """
@@ -162,7 +168,7 @@ def get_unique_values_to_excel(df, columns, output_file):
 
     # Output the unique values to an Excel file
     unique_values_df.to_csv(output_file, index=False)
-    #print(f"Unique values have been written to {output_file}.")
+    # print(f"Unique values have been written to {output_file}.")
 
 
 def trim_columns(df, columns):
@@ -185,14 +191,16 @@ def trim_columns(df, columns):
             print(f"Warning: Column '{col}' does not exist in the DataFrame.")
     return df
 
-def columns_encoding(df): 
+
+def columns_encoding(df):
     # One-hot encode nominal columns
-    nominal_columns = ["Location_Type", "Initial_Impact_Type", "Road_Surface_Condition", "Environment_Condition", "Traffic_Control"]
+    nominal_columns = ["Location_Type", "Initial_Impact_Type", "Road_Surface_Condition", "Environment_Condition",
+                       "Traffic_Control"]
     df = pd.get_dummies(df, columns=nominal_columns, drop_first=True)
 
     # Label encode ordinal columns
     ordinal_columns = {"Classification_Of_Accident": {"P.D. only": 0, "Non-fatal injury": 1, "Fatal injury": 2},
-                    "Light": {"Dawn": 0, "Daylight": 1, "Dusk": 2, "Dark": 3, "Other": 4}}
+                       "Light": {"Dawn": 0, "Daylight": 1, "Dusk": 2, "Dark": 3, "Other": 4}}
     for col, mapping in ordinal_columns.items():
         df[col] = df[col].map(mapping)
 
@@ -216,6 +224,7 @@ def handle_class_imbalance(X, y):
     print("\nClass imbalance handled using SMOTE.")
     return X_resampled, y_resampled
 
+
 def visualize_and_interpret(df, model, X):
     """
     Handles visualization and interpretability of the model and data.
@@ -238,19 +247,6 @@ def visualize_and_interpret(df, model, X):
     visualize(df)
 
 
-# Specify the path to your CSV file.
-file_path = PATH_ORIGINAL_DATASET
-
-# Load the CSV file into a DataFrame.
-df = pd.read_csv(file_path)
-
-# Apply data cleaning and pre-processing functions.
-df = data_prep(df)
-
-# Split into features and target variables.
-X, y = split_features_target(df, "Classification_Of_Accident")
-
-
 def check_classification_type(y):
     """
     Determines whether the classification is binary or multi-class.
@@ -268,6 +264,20 @@ def check_classification_type(y):
         return "Multi-Class Classification"
 
 
+# Specify the path to your CSV file.
+file_path = PATH_ORIGINAL_DATASET
+
+# Load the CSV file into a DataFrame.
+df = pd.read_csv(file_path)
+
+# Apply data cleaning and pre-processing functions.
+df = data_prep(df)
+
+# Verify successful cleaning.
+print(f"\nFinal number of rows in the cleaned dataset: {len(df)}")
+
+# Split into features and target variables.
+X, y = split_features_target(df, "Classification_Of_Accident")
 
 # Handle class imbalance.
 X_resampled, y_resampled = handle_class_imbalance(X, y)
@@ -279,10 +289,8 @@ print(f"The task is: {classification_type}")
 # Train the Random Forest Classifier.
 model, y_test, y_pred, y_pred_proba = train_random_forest(X_resampled, y_resampled)
 
-
 # Class names for visualization
 class_names = df["Classification_Of_Accident"].unique()
-
 
 # Example usage
 # Metrics visualization
@@ -293,8 +301,5 @@ plot_feature_importance_bar(model, X.columns)
 plot_classification_report(y_test, y_pred)
 plot_misclassifications(y_test, y_pred)
 
-# Verify successful cleaning.
-print(f"\nFinal number of rows in the cleaned dataset: {len(df)}")
-
 # Visualize and create interpretability insights.
-#visualize_and_interpret(df, model, X_resampled)
+# visualize_and_interpret(df, model, X_resampled)

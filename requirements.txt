@@ -140,3 +140,5 @@ XlsxWriter==3.1.2
 yarg==0.1.9
 
 seaborn~=0.13.2
+imblearn~=0.0
+shap~=0.46.0
