@@ -33,6 +33,17 @@ def visualize_bar_plots(data_frame, features: list[str] = DATA_CATEGORICAL_FEATU
         for i, feature1 in enumerate(features):
             for feature2 in features[i + 1:]:  # Avoid self-comparison.
                 crosstab_result = pd.crosstab(data_frame[feature1], data_frame[feature2])
+
+                # Sort the columns of crosstab_result based on their total sum in descending order
+                crosstab_result = crosstab_result[sorted(crosstab_result.columns,
+                                                         key=lambda col: crosstab_result[col].sum(),
+                                                         reverse=True)]
+
+                # Sort the index of crosstab_result by its total sum in descending order
+                crosstab_result = crosstab_result.loc[sorted(crosstab_result.index,
+                                                         key=lambda row: crosstab_result.loc[row].sum(),
+                                                         reverse=True)]
+
                 plots[(feature1, feature2)] = crosstab_result  # Store the stacked plot in the dictionary.
 
         # Plot as a stacked bar chart
@@ -54,13 +65,14 @@ def visualize_bar_plots(data_frame, features: list[str] = DATA_CATEGORICAL_FEATU
             sorted_counts = data_frame[feature].value_counts().sort_values(ascending=False)
 
             # Convert the sorted index to a categorical type for ordering in the plot.
-            data_frame[feature] = pd.Categorical(data_frame[feature], categories=sorted_counts.index, ordered=True)
+            temp_feature = feature + "_temp"
+            data_frame[temp_feature] = pd.Categorical(data_frame[feature], categories=sorted_counts.index, ordered=True)
 
             # Create the count plot.
             feature_name = feature.replace("_", " ")
             title = f"Bar Plot of Accidents by {feature_name}"
             plt.figure(figsize=(10, 6))  # Set figure size for better resolution
-            sns.countplot(data=data_frame, x=feature, order=sorted_counts.index)
+            sns.countplot(data=data_frame, x=temp_feature, order=sorted_counts.index)
             plt.title(title)
             plt.xlabel(feature_name)
             plt.ylabel("Number of Accidents")
@@ -70,17 +82,34 @@ def visualize_bar_plots(data_frame, features: list[str] = DATA_CATEGORICAL_FEATU
             plt.savefig(f"{PATH_VISUALIZATIONS}/Bar Plots/{title}{VISUALIZATIONS_FILE_TYPE}", dpi=300, bbox_inches="tight")
             plt.close()
 
+            data_frame.drop(columns=[temp_feature], inplace=True)
 
-def visualize_latitude_longitude(data_frame):
+
+
+def visualize_geographic_data(data_frame):
     """
-    Scatterplot for longitude vs latitude of accidents.
+    Scatter Plots for geographical data.
     """
+
+    # Scatterplot for longitude vs latitude of accidents.
     plt.figure(figsize=(10, 6))
     plt.scatter(data_frame["Long"], data_frame["Lat"], alpha=0.5)
-    title = "Geographic Distribution of Accidents"
+    title = "Latitude vs Longitude of Accidents"
     plt.title(title)
     plt.xlabel("Longitude")
     plt.ylabel("Latitude")
+    plt.xticks(rotation=45)
+    # Save the plot to a file.
+    plt.savefig(f"{PATH_VISUALIZATIONS}/Scatter Plots/{title}{VISUALIZATIONS_FILE_TYPE}", dpi=300, bbox_inches="tight")
+    plt.close()
+
+    # Scatterplot for X vs Y of accidents.
+    plt.figure(figsize=(10, 6))
+    plt.scatter(data_frame["X"], data_frame["Y"], alpha=0.5)
+    title = "Y vs X of Accidents"
+    plt.title(title)
+    plt.xlabel("X")
+    plt.ylabel("Y")
     plt.xticks(rotation=45)
     # Save the plot to a file.
     plt.savefig(f"{PATH_VISUALIZATIONS}/Scatter Plots/{title}{VISUALIZATIONS_FILE_TYPE}", dpi=300, bbox_inches="tight")
@@ -116,13 +145,17 @@ def visualize_time_plots(data_frame):
         plt.savefig(f"{PATH_VISUALIZATIONS}/Bar Plots/{title}{VISUALIZATIONS_FILE_TYPE}", dpi=300, bbox_inches="tight")
         plt.close()
 
+        if feature == "month":
+            data_frame.drop(columns=["month_name"], inplace=True)
+
 
 def visualize(data_frame):
     """
     Produce statistics summary and visualization files.
     """
+    print("<<<Starting Visualization>>>")
     summary_statistics(data_frame, DATA_FINAL_FEATURES)
-    visualize_latitude_longitude(data_frame)
+    visualize_geographic_data(data_frame)
     visualize_time_plots(data_frame)
     visualize_bar_plots(data_frame, DATA_CATEGORICAL_FEATURES, stack_plots=False)
     visualize_bar_plots(data_frame, DATA_CATEGORICAL_FEATURES, stack_plots=True)

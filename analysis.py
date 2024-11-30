@@ -49,7 +49,6 @@ rows_with_missing.to_csv(missing_rows_file, index=False)
 print(f"Rows with missing values have been saved to {missing_rows_file}.")
 
 
-
 # Check for rows containing "Unknown" as part of the value
 unknown_counts = df.applymap(lambda x: "Unknown" in str(x)).sum()  # Count occurrences of "Unknown" in each column
 unknown_total = unknown_counts.sum()  # Total occurrences across the dataset
@@ -57,7 +56,7 @@ unknown_total = unknown_counts.sum()  # Total occurrences across the dataset
 # Filter columns that contain "Unknown"
 columns_with_unknown = unknown_counts[unknown_counts > 0]
 
-# Display results
+# Display Results
 print("\nColumns containing 'Unknown' (partial matches included) and their counts:")
 print(columns_with_unknown)
 

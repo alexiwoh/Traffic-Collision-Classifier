@@ -1,3 +1,9 @@
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import classification_report, accuracy_score
+import pandas as pd
+
+
 def split_features_target(df, target_column):
     """
     Splits a DataFrame into features (X) and target (y).
@@ -13,13 +19,13 @@ def split_features_target(df, target_column):
     """
     if target_column not in df.columns:
         raise ValueError(f"Column '{target_column}' not found in the DataFrame.")
-    
+
     # Features (X) exclude the target column
     X = df.drop(columns=[target_column])
-    
+
     # Target (y) is the specified column
     y = df[target_column]
-    
+
     return X, y
 
 
@@ -33,25 +39,21 @@ def class_distribution(y):
     Returns:
         pd.DataFrame: A DataFrame showing class counts and percentages.
     """
-    import pandas as pd
-    
+
     # Calculate class counts
     counts = pd.Series(y).value_counts()
-    
+
     # Calculate percentages
     percentages = pd.Series(y).value_counts(normalize=True) * 100
-    
+
     # Combine counts and percentages into a DataFrame
     distribution = pd.DataFrame({
         "Count": counts,
         "Percentage": percentages
     })
-    
+
     return distribution
 
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.model_selection import train_test_split
-from sklearn.metrics import classification_report, accuracy_score
 
 def train_random_forest(X, y, test_size=0.3, random_state=42, n_estimators=100):
     """
@@ -85,7 +87,7 @@ def train_random_forest(X, y, test_size=0.3, random_state=42, n_estimators=100):
     y_pred = model.predict(X_test)
 
     # Get predicted probabilities for all classes
-    y_pred_proba = model.predict_proba(X_test)  
+    y_pred_proba = model.predict_proba(X_test)
 
     # Print evaluation metrics
     print("Model Performance:")
@@ -94,4 +96,3 @@ def train_random_forest(X, y, test_size=0.3, random_state=42, n_estimators=100):
     print(classification_report(y_test, y_pred))
 
     return model, y_test, y_pred, y_pred_proba
-

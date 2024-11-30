@@ -6,6 +6,7 @@ This file contains all shared constants.
 PATH_ORIGINAL_DATASET = "Datasets/Traffic_Collision_Dataset.csv"
 PATH_CLEANED_DATASET_OUTPUT = "Updated_Datasets/cleaned_dataset.csv"
 PATH_VISUALIZATIONS = "Visualizations"
+PATH_RESULTS = "Results"
 
 # Titles and text.
 TITLE_LENGTH = 42
@@ -31,7 +32,11 @@ DATA_FINAL_FEATURES = [
     "month",
     "day",
     "hour",
-    "minute"
+    "minute",
+    "X",
+    "Y",
+    "X_Coordinate",
+    "Y_Coordinate",
 ]
 
 # List of final categorical features being used.
@@ -53,7 +58,11 @@ DATA_NUMERICAL_FEATURES = [
     "month",
     "day",
     "hour",
-    "minute"
+    "minute",
+    "X",
+    "Y",
+    "X_Coordinate",
+    "Y_Coordinate",
 ]
 
 # Dictionary for month mapping.
@@ -77,10 +86,6 @@ DATA_COLUMNS_TO_DROP = [
     "Accident_Year",
     "Geo_ID",
     "ID",
-    "X",
-    "Y",
-    "X_Coordinate",
-    "Y_Coordinate",
     "Location",
     "Num_of_Vehicle"
 ]

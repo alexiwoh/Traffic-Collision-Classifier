@@ -48,6 +48,9 @@ def data_prep(df):
 
     get_unique_values_to_excel(df, columns_to_trim, "Updated_Datasets/unique_cols_dataset_after_trim.csv")
 
+    # Visualize data insights
+    visualize(df)
+
     df = columns_encoding(df)
 
     # Specify the output file name for the cleaned dataset.
@@ -148,7 +151,7 @@ def get_unique_values_to_excel(df, columns, output_file):
     Parameters:
         df (pd.DataFrame): The DataFrame to check.
         columns (list): List of column names to get unique values from.
-        output_file (str): Path to the Excel file where results will be saved.
+        output_file (str): Path to the Excel file where Results will be saved.
 
     Returns:
         None
@@ -242,9 +245,6 @@ def visualize_and_interpret(df, model, X):
 
     # Generate partial dependence plots (PDPs)
     plot_pdp(model, X, X.columns)
-
-    # Visualize data insights
-    visualize(df)
 
 
 def check_classification_type(y):

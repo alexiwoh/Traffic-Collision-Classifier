@@ -1,4 +1,9 @@
+import os
 import matplotlib.pyplot as plt
+from sklearn.inspection import PartialDependenceDisplay
+from constants import *
+import shap
+
 
 def plot_feature_importance(model, feature_names):
     """
@@ -15,14 +20,14 @@ def plot_feature_importance(model, feature_names):
     # Plot the feature importance
     plt.figure(figsize=(10, 6))
     plt.barh(sorted_features, importances[indices], align="center", color="skyblue")
-    plt.title("Feature Importance")
+    title = "Feature Importance"
+    plt.title(title)
     plt.xlabel("Importance")
     plt.ylabel("Features")
     plt.gca().invert_yaxis()
-    plt.show()
+    plt.savefig(os.path.join(PATH_RESULTS, f"{title}{VISUALIZATIONS_FILE_TYPE}"))
+    plt.close()
 
-
-import shap
 
 def explain_with_shap(model, X):
     """
@@ -63,4 +68,5 @@ def plot_pdp(model, X, feature_names):
     PartialDependenceDisplay.from_estimator(
         model, X, selected_features, feature_names=feature_names, grid_resolution=50
     )
-    plt.show()
+    plt.savefig(os.path.join(PATH_RESULTS, f"Partial Dependence Plot{VISUALIZATIONS_FILE_TYPE}"))
+    plt.close()
