@@ -1,3 +1,5 @@
+import textwrap
+
 from helpers import *
 import pandas as pd
 import seaborn as sns
@@ -11,6 +13,7 @@ def summary_statistics(data_frame, features: list = DATA_FINAL_FEATURES):
     :param features: features to summarize.
     :return:
     """
+
     def func():
         for feature in features:
             print(data_frame[feature].describe(include="all"))
@@ -44,8 +47,8 @@ def visualize_bar_plots(data_frame, features: list[str] = DATA_CATEGORICAL_FEATU
 
                 # Sort the index of crosstab_result by its total sum in descending order
                 crosstab_result = crosstab_result.loc[sorted(crosstab_result.index,
-                                                         key=lambda row: crosstab_result.loc[row].sum(),
-                                                         reverse=True)]
+                                                             key=lambda row: crosstab_result.loc[row].sum(),
+                                                             reverse=True)]
 
                 plots[(feature1, feature2)] = crosstab_result  # Store the stacked plot in the dictionary.
 
@@ -60,7 +63,8 @@ def visualize_bar_plots(data_frame, features: list[str] = DATA_CATEGORICAL_FEATU
             plt.xticks(rotation=45)
 
             # Save the plot to a file.
-            plt.savefig(f"{PATH_VISUALIZATIONS}/Stacked Bar Plots/{title}{VISUALIZATIONS_FILE_TYPE}", dpi=300, bbox_inches="tight")
+            plt.savefig(f"{PATH_VISUALIZATIONS}/Stacked Bar Plots/{title}{VISUALIZATIONS_FILE_TYPE}", dpi=300,
+                        bbox_inches="tight")
             plt.close()
     else:
         for feature in features:
@@ -82,11 +86,11 @@ def visualize_bar_plots(data_frame, features: list[str] = DATA_CATEGORICAL_FEATU
             plt.xticks(rotation=45)  # Rotate x-axis labels for readability
 
             # Save the plot to a file.
-            plt.savefig(f"{PATH_VISUALIZATIONS}/Bar Plots/{title}{VISUALIZATIONS_FILE_TYPE}", dpi=300, bbox_inches="tight")
+            plt.savefig(f"{PATH_VISUALIZATIONS}/Bar Plots/{title}{VISUALIZATIONS_FILE_TYPE}", dpi=300,
+                        bbox_inches="tight")
             plt.close()
 
             data_frame.drop(columns=[temp_feature], inplace=True)
-
 
 
 def visualize_geographic_data(data_frame):
@@ -117,6 +121,31 @@ def visualize_geographic_data(data_frame):
     # Save the plot to a file.
     plt.savefig(f"{PATH_VISUALIZATIONS}/Scatter Plots/{title}{VISUALIZATIONS_FILE_TYPE}", dpi=300, bbox_inches="tight")
     plt.close()
+
+    # Bar Plot of the Top accident locations.
+    N = 10  # Number of locations.
+    sorted_counts = data_frame[FEATURE_LOCATION].value_counts().sort_values(ascending=False)  # Count the occurrences and sort them.
+    top_locations = sorted_counts.head(N)  # Extract the top N locations.
+    top_indexes = top_locations.index.tolist()
+    plt.figure(figsize=(N, 8))
+    sns.barplot(
+        x=top_indexes,
+        y=top_locations.values,
+        legend="full",
+        hue=top_indexes,  # Add this to enable legend coloring
+        dodge=False,  # Prevent separation of bars due to hue
+        palette=f"tab{N}"  # Choose a colormap
+    )
+    plt.legend(title="Locations", bbox_to_anchor=(1.05, 1), loc='upper left')
+    title = f"Bar Plot of Accidents at Top {N} Locations"
+    plt.title(title)
+    plt.xlabel(FEATURE_LOCATION)
+    plt.ylabel("Number of Accidents")
+    plt.xticks([])  # Remove x-tick labels since we will have a legend.
+    plt.savefig(f"{PATH_VISUALIZATIONS}/Bar Plots/{title}{VISUALIZATIONS_FILE_TYPE}", dpi=300, bbox_inches="tight")
+    plt.close()
+
+    data_frame.drop(columns=[FEATURE_LOCATION], inplace=True)  # Drop the Location column.
 
 
 def visualize_time_plots(data_frame):

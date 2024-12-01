@@ -18,7 +18,9 @@ VISUALIZATIONS_FILE_TYPE = ".png"
 
 #  Dataset related constants
 # Final features to be used for analysis.
+FEATURE_LOCATION = "Location"
 DATA_FINAL_FEATURES = [
+    FEATURE_LOCATION,
     "Location_Type",
     "Classification_Of_Accident",
     "Initial_Impact_Type",
@@ -86,6 +88,5 @@ DATA_COLUMNS_TO_DROP = [
     "Accident_Year",
     "Geo_ID",
     "ID",
-    "Location",
     "Num_of_Vehicle"
 ]
