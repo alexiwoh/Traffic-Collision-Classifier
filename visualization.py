@@ -30,8 +30,11 @@ def visualize_bar_plots(data_frame, features: list[str] = DATA_CATEGORICAL_FEATU
         # Store stacked plots information in a dictionary.
         plots = {}
 
-        for i, feature1 in enumerate(features):
-            for feature2 in features[i + 1:]:  # Avoid self-comparison.
+        for feature1 in features:
+            for feature2 in features:
+                if feature1 == feature2:
+                    continue
+
                 crosstab_result = pd.crosstab(data_frame[feature1], data_frame[feature2])
 
                 # Sort the columns of crosstab_result based on their total sum in descending order
