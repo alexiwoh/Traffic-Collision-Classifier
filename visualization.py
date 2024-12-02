@@ -4,6 +4,7 @@ from helpers import *
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
+from mpl_toolkits.basemap import Basemap
 
 
 def summary_statistics(data_frame, features: list = DATA_FINAL_FEATURES):
@@ -98,7 +99,9 @@ def visualize_geographic_data(data_frame):
     Scatter Plots for geographical data.
     """
 
-    # Scatterplot for longitude vs latitude of accidents.
+    """ 
+        Scatterplot for longitude vs latitude of accidents.
+    """
     plt.figure(figsize=(10, 6))
     plt.scatter(data_frame["Long"], data_frame["Lat"], alpha=0.5)
     title = "Latitude vs Longitude of Accidents"
@@ -110,7 +113,35 @@ def visualize_geographic_data(data_frame):
     plt.savefig(f"{PATH_VISUALIZATIONS}/Scatter Plots/{title}{VISUALIZATIONS_FILE_TYPE}", dpi=300, bbox_inches="tight")
     plt.close()
 
-    # Scatterplot for X vs Y of accidents.
+    """ 
+        Scatterplot Map for longitude vs latitude of accidents.
+    """
+    plt.figure(figsize=(10, 6))
+
+    # Create a Basemap instance with Mercator projection
+    filtered_data = data_frame[(data_frame["Lat"] > 43) & (data_frame["Long"] > -77)]
+    m = Basemap(projection='merc', llcrnrlat=min(filtered_data["Lat"]), urcrnrlat=max(filtered_data["Lat"]),
+                llcrnrlon=min(filtered_data["Long"]), urcrnrlon=max(filtered_data["Long"]), resolution='i')
+    # Draw map features (optional)
+    m.drawcoastlines()
+    m.drawcountries()
+    m.drawstates()
+    # Convert longitude and latitude to map projection coordinates
+    x, y = m(data_frame["Long"].values, data_frame["Lat"].values)
+    # Plot scatter on the map (on top of the background)
+    m.scatter(x, y, color='red', edgecolor='black', linewidth=1, alpha=0.5, marker='o')
+
+    title = "Map of Latitude vs Longitude of Accidents"
+    plt.title(title)
+    plt.xlabel("Longitude")
+    plt.ylabel("Latitude")
+    plt.xticks(rotation=45)
+    plt.savefig(f"{PATH_VISUALIZATIONS}/Scatter Plots/{title}{VISUALIZATIONS_FILE_TYPE}", dpi=300, bbox_inches="tight")
+    plt.close()
+
+    """
+        Scatterplot for X vs Y of accidents.
+    """
     plt.figure(figsize=(10, 6))
     plt.scatter(data_frame["X"], data_frame["Y"], alpha=0.5)
     title = "Y vs X of Accidents"
@@ -122,7 +153,9 @@ def visualize_geographic_data(data_frame):
     plt.savefig(f"{PATH_VISUALIZATIONS}/Scatter Plots/{title}{VISUALIZATIONS_FILE_TYPE}", dpi=300, bbox_inches="tight")
     plt.close()
 
-    # Bar Plot of the Top accident locations.
+    """
+        Bar Plot of the Top accident locations.
+    """
     N = 10  # Number of locations.
     sorted_counts = data_frame[FEATURE_LOCATION].value_counts().sort_values(ascending=False)  # Count the occurrences and sort them.
     top_locations = sorted_counts.head(N)  # Extract the top N locations.
